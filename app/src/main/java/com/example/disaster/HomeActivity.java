@@ -60,6 +60,14 @@ public class HomeActivity extends Fragment {
             }
         });
 
+        final ImageButton droneBtn = rootView.findViewById(R.id.drone_btn);
+        droneBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity().getApplicationContext(), DroneActivity.class));
+            }
+        });
+
        /* Button pauseButton=(Button) rootView.findViewById(R.id.pause);
         pauseButton.setOnClickListener(new View.OnClickListener(){
             @Override

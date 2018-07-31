@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
             public void onTabUnselected(TabLayout.Tab tab) {
                 switch(tab.getPosition()){
                     case 0:
-                        homeTab.setIcon(R.drawable.ic_home_dark);
+                        homeTab.setIcon(R.drawable.ic_home);
                         break;
 
                     case 1:

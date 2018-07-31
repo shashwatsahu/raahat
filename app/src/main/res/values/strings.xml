@@ -2,4 +2,49 @@
     <string name="app_name">Raahat</string>
     <string name="app">hello</string>
     <string name="title_activity_maps">Map</string>
+
+    <string name="appbar_scrolling_view_behavior">Appbar Scrolling View</string>
+    <string name="take_barcode_picture">Take Barcode Picture</string>
+    <string name="scan_barcode">Scan Barcode</string>
+    <string name="open_camera">OPEN CAMERA</string>
+    <string name="send_email">SEND EMAIL</string>
+    <string name="add_items">Add Items</string>
+    <string name="action_settings">action settings</string>
+    <string name="editor_activity_title_edit_item">Edit Item</string>
+    <string name="empty_view_title_text">It\'s a bit lonely here...</string>
+    <string name="empty_view_subtitle_text">Get started by adding an item</string>
+    <string name="image">image</string>
+    <string name="search_hint">search products</string>
+    <string name="menu_search">search</string>
+
+    <plurals name="search_results">
+        <item quantity="one">%1$d result for \"%2$s\": </item>
+        <item quantity="other">%1$d results for \"%2$s\": </item>
+    </plurals>
+
+    <string name="search_label">Dictionary</string>
+
+    <!-- The description that will show up in the search settings for this source.  -->
+    <string name="settings_description">Definitions of words</string>
+
+    <!-- General instructions in the main activity. -->
+    <string name="search_instructions">Use the search box in the Action Bar to look up a word</string>
+
+    <!-- Shown above search results when we receive a search request. -->
+
+    <!-- Search failure message. -->
+    <string name="no_results">No results found for \"%s\"</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dialog_fire_missiles">fire missile</string>
+    <string name="fire">fire</string>
+    <string name="cancel">cancel</string>
+    <string name="units">units</string>
+    <string name="selling_price">selling price</string>
+    <string name="confirm">confirm</string>
+    <string name="name">name</string>
+    <string name="phone">Mobile Number</string>
+    <string name="save">save</string>
+
 </resources>

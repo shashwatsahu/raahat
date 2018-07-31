@@ -191,10 +191,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Log.i(TAG, "on map ready");
         mMap = googleMap;
 
+        lat = 23.236276;
+        lon = 77.457672;
+
         LatLng dangerous = new LatLng(lat, lon);
         // Add a marker in current position...
         mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title("Me!"));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lon), 12.0f));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lon), 15.0f));
 
         circle = mMap.addCircle(new CircleOptions().center(dangerous).radius(1500).strokeColor(Color.BLUE).fillColor(0x220000FF)
                 .strokeWidth(5.0f));

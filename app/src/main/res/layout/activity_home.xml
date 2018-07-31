@@ -38,7 +38,7 @@
                 android:id="@+id/alarm_btn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_alarm_off"
+                android:src="@drawable/ic_siren"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"/>
 
@@ -51,9 +51,10 @@
                 android:background="@android:color/transparent"/>
 
             <ImageButton
+                android:id="@+id/drone_btn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_helicopter"
+                android:src="@drawable/ic_quadcopter"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"/>
 

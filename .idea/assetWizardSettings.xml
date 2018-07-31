@@ -29,13 +29,25 @@
                                           </PersistentState>
                                         </value>
                                       </entry>
+                                      <entry key="image">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="paddingPercent" value="-10" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
                                     </map>
                                   </option>
                                   <option name="values">
                                     <map>
+                                      <entry key="imageAsset" value="C:\Users\hp\Pictures\food_packet.jpg" />
                                       <entry key="outputName" value="ic_home_dark" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="c7c7c7" />
+                                      <entry key="themeColor" value="9e9e9e" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -72,10 +84,11 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="backgroundLayerName" value="ic_launcher_background" />
+                                      <entry key="backgroundLayerName" value="ic_food_packet" />
                                       <entry key="foregroundAssetType" value="CLIP_ART" />
+                                      <entry key="foregroundImage" value="C:\Users\hp\Pictures\food_packet.jpg" />
                                       <entry key="foregroundLayerName" value="ic_alarm_off" />
-                                      <entry key="outputName" value="ic_alarm" />
+                                      <entry key="outputName" value="ic_account_dark" />
                                     </map>
                                   </option>
                                 </PersistentState>

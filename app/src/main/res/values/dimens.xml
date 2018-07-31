@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="tabhostHeight">48dp</dimen>
+    <dimen name="tabSelectorHeight">2dp</dimen>
+    <dimen name="materialTextTab">14sp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="edit_text_margin">6dp</dimen>
+    <dimen name="detail_size">11sp</dimen>
+    <dimen name="header_size">13sp</dimen>
+    <dimen name="button_dimen_width">35dp</dimen>
+    <dimen name="button_dimen_height">27dp</dimen>
+    <dimen name="product_name_list">16sp</dimen>
+    <dimen name="product_brand_list">14sp</dimen>
+</resources>

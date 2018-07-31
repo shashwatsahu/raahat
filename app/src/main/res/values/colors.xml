@@ -5,4 +5,29 @@
     <color name="colorAccent">#5e35b1</color>
     <color name="white">#ffffff</color>
     <color name="layout_background">#5e35b1</color>
+
+    <color name="lightGrey">#424242</color>
+    <color name="peterRiver">#3498db</color>
+    <color name="clouds">#ecf0f1</color>
+    <color name="concrete">#95a5a6</color>
+    <color name="asbestos">#7f8c8d</color>
+    <color name="silver">#bdc3c7</color>
+    <color name="toolbar_color">#FFFFFF</color>
+    <color name="toolbar_color1">#292730</color>
+    <color name="toolbar_color2">#34495e</color>
+
+    <color name="layout_background2">#2c3e50</color>
+    <color name="layout_background1">#1A1b1c</color>
+
+
+    <color name="grey">#DAE1E9</color>
+    <color name="green">#76FF03</color>
+    <color name="hint_color">@color/concrete</color>
+    <color name="edit_txt_stroke">#B2EBF2</color>
+    <color name="details">#9E9E9E</color>
+    <color name="button_activate_border">#3498db</color>
+    <color name="edit_txt_border">#E0E0E0</color>
+    <color name="details_line">#E0E0E0</color>
+    <color name="midnight_blue">#2c3e50</color>
+    <color name="wetasphalt">#34495e</color>
 </resources>
