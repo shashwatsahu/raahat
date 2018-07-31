@@ -1,5 +1,6 @@
 package com.example.disaster;
 
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,6 +12,8 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -45,14 +48,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private static final String TAG = "MapsActivity";
 
-    private double lat,lon;
+    private double lat, lon;
 
     private String shopName;
 
     private GoogleMap mMap;
     Circle circle;
     Marker marker;
+    private Location location;
+
     NotificationManager manager;
+    private AddressResultReceiver mResultReceiver;
 
     private HashMap<String, Float> shopMap;
 
@@ -66,15 +72,55 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        Log.i(TAG, "onCreate");
+
+        mResultReceiver = new AddressResultReceiver(new Handler());
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
 
+        mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
+
+        if (location != null) {
+            //startIntentService();
+            Log.i(TAG, "location not null");
+            return;
+        } else
+            Log.i(TAG, "Location is null");
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            // public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                       int[] grantResults)
+            Log.i(TAG, "permission!");
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mFusedLocation.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    System.out.println("Provider " + provider + " has been selected.");
+                    lat = location.getLatitude();
+                    lon = location.getLongitude();
+                    // onLocationChanged(location);
+                } else {
+                    //latituteField.setText("Location not available");
+                    //longitudeField.setText("Location not available");
+                    Log.i(TAG, "location not available");
+                }
+            }
+        });
+
+        Log.i(TAG, "second");
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mapFragment.getMapAsync(this);
 
-        Criteria criteria = new Criteria();
+        /*Criteria criteria = new Criteria();
         provider = locationManager.getBestProvider(criteria, false);
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -95,21 +141,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } else {
             //latituteField.setText("Location not available");
             //longitudeField.setText("Location not available");
-        }
+            Log.i(TAG, "location not available");
+        }*/
 
         //new one
 
-       // final LatLng dangerous = new LatLng(23.2315017, 77.4574933);
-
+        // final LatLng dangerous = new LatLng(23.2315017, 77.4574933);
 
     }
 
     @Override
     public void onLocationChanged(Location location) {
         Log.i(TAG, "onLocationChanged");
-         lat = (location.getLatitude());
-         lon = (location.getLongitude());
-         LatLng dangerous = new LatLng(lat, lon);
+        lat = location.getLatitude();
+        lon = location.getLongitude();
+        LatLng dangerous = new LatLng(lat, lon);
 
     }
 
@@ -145,39 +191,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Log.i(TAG, "on map ready");
         mMap = googleMap;
 
-        mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
+        LatLng dangerous = new LatLng(lat, lon);
+        // Add a marker in current position...
+        mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title("Me!"));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lon), 12.0f));
 
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-
-        mFusedLocation.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-
-                Log.i(TAG, "Latitude:" + location.getLatitude() + " Longitude:" + location.getLongitude());
-
-                LatLng dangerous = new LatLng(location.getLatitude(), location.getLongitude());
-                // Add a marker in current position...
-                mMap.addMarker(new MarkerOptions().position(new LatLng(dangerous.latitude,dangerous.longitude)).title("Me!"));
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(dangerous.latitude,dangerous.longitude), 12.0f));
-
-                circle = mMap.addCircle(new CircleOptions().center(dangerous).radius(500).strokeColor(Color.BLUE).fillColor(0x220000FF)
-                        .strokeWidth(5.0f)
-                );
-            }
-        });
+        circle = mMap.addCircle(new CircleOptions().center(dangerous).radius(1500).strokeColor(Color.BLUE).fillColor(0x220000FF)
+                .strokeWidth(5.0f));
     }
 
     private void sendNotification(String title, String content) {
-        long [] num = new long[1];
+        long[] num = new long[1];
         num[0] = 1000;
         Notification.Builder builder = new Notification.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher_round)
@@ -197,7 +221,46 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-      Log.i(TAG, "marker Id" + marker.getId());
+        Log.i(TAG, "marker Id" + marker.getId());
         return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    private class AddressResultReceiver extends android.os.ResultReceiver {
+
+        AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+           /* mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
+
+            displayAddressOutput();
+
+            if(resultCode == Constants.SUCCESS_RESULT){
+                showLog(getString(R.string.address_found));
+
+                strings = resultData.getStringArray(Constants.LIST_OF_DATA);
+                if(strings != null) {
+                    Log.i(TAG, "Lat" + strings[1] + " Lon: " + strings[2]);
+                    address.setText(strings[0]);
+                    state.setText(strings[6]);
+                    country.setText(strings[7]);
+                    city.setText(strings[8]);
+                }
+            }
+
+            mAddressRequested = false;
+            //updateUIWidgets();
+
+        }*/
+        }
+
+
     }
 }
