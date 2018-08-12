@@ -46,5 +46,6 @@
     <string name="name">name</string>
     <string name="phone">Mobile Number</string>
     <string name="save">save</string>
+    <string name="emergency_phone">Emergency Contacts</string>
 
 </resources>

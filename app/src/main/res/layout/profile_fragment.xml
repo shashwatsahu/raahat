@@ -31,7 +31,7 @@
                     android:focusable="true"
                     android:onClick="getImage"
                     android:background="@android:color/transparent"
-                    android:src="@mipmap/ic_camera_img_round"/>
+                    android:src="@drawable/icons8_user_100"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -112,6 +112,19 @@
                     android:drawablePadding="8dp"
                     android:hint="@string/phone"/>
 
+                <EditText
+                    android:id="@+id/emergency_contacts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/detail_size"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="4dp"
+                    android:drawableStart="@drawable/ic_phone_dark_grey"
+                    android:drawablePadding="8dp"
+                    android:hint="@string/emergency_phone"/>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -146,7 +159,7 @@
                         android:id="@+id/lat_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Latitude : 12.5646"
+                        android:text="Latitude : 23.236276"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="4dp"
@@ -160,7 +173,7 @@
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="4dp"
                         android:layout_marginEnd="16dp"
-                        android:text="Longitude : 12.5646"/>
+                        android:text="Longitude : 77.457672"/>
 
                 </LinearLayout>
 

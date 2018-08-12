@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient"
+    android:background="@drawable/green_gradient"
     tools:context=".HomeActivity">
 
     <android.support.v7.widget.Toolbar
@@ -61,8 +61,6 @@
         </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
-
-
     <Button
         android:id="@+id/help_me_btn"
         android:layout_width="wrap_content"
