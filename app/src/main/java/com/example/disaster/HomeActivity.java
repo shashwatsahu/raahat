@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
-import android.hardware.Camera;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 import android.location.Geocoder;
@@ -27,21 +26,15 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -49,12 +42,10 @@ import android.widget.Toast;
 
 import com.example.disaster.account.AccountManager;
 import com.example.disaster.basemaps.BasemapsDialogFragment;
-import com.example.disaster.util.MapsActivity2;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
@@ -63,6 +54,8 @@ import butterknife.BindView;
 public class HomeActivity extends Fragment implements LoaderManager.LoaderCallbacks<List<String>>{
 
     private String TAG = "HomeActivity";
+
+    private double lat, lng;
 
     private static final int PERMISSION_REQUEST_LOCATION = 0;
     private static final int REQUEST_LOCATION_SETTINGS = 1;
@@ -152,8 +145,6 @@ public class HomeActivity extends Fragment implements LoaderManager.LoaderCallba
             public void onClick(View v) {
                 updateValuesFromBundle(savedInstanceState);
 
-
-
                 mAddressRequested = false;
                 mAddressOutput = "";
 
@@ -219,8 +210,14 @@ public class HomeActivity extends Fragment implements LoaderManager.LoaderCallba
         mapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(getActivity().getApplicationContext(), MapsActivity2.class);
+                Log.i(
+                        TAG, "Lat:" + lat + " Lng:" + lng
+                );
+                intent.putExtra(KeyValue.LATLNG, new double[] {lat, lng});
 
-                startActivity(new Intent(getActivity().getApplicationContext(), MapsActivity2.class));
+                startActivity(intent);
                 /*BasemapsDialogFragment basemapsFrag = new BasemapsDialogFragment();
                 basemapsFrag.setBasemapsDialogListener(new BasemapsDialogFragment.BasemapsDialogListener() {
 
@@ -592,7 +589,6 @@ public class HomeActivity extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoaderReset(Loader<List<String>> loader) {
-
     }
 
     /**
@@ -618,10 +614,12 @@ public class HomeActivity extends Fragment implements LoaderManager.LoaderCallba
                 if(strings != null) {
                   //todo  Log.i(TAG, "Lat" + strings[1] + " Lon: " + strings[2]);
                     address = strings[0];
-
                     state = strings[6];
                     country = (strings[7]);
                     city = (strings[8]);
+
+                    lat = Double.parseDouble(strings[1]);
+                    lng = Double.parseDouble(strings[2]);
 
                     Toast.makeText(getActivity().getApplicationContext(), address + " " + city + " " + state + " " + country
                     , Toast.LENGTH_SHORT).show();

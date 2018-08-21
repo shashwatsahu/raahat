@@ -63,7 +63,7 @@
 
         <activity android:name=".SurveyActivity" />
         <activity
-            android:name=".util.MapsActivity2"
+            android:name=".MapsActivity2"
             android:label="@string/title_activity_maps2"></activity>
     </application>
 
