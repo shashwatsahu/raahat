@@ -49,6 +49,7 @@ import android.widget.Toast;
 
 import com.example.disaster.account.AccountManager;
 import com.example.disaster.basemaps.BasemapsDialogFragment;
+import com.example.disaster.util.MapsActivity2;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -219,7 +220,7 @@ public class HomeActivity extends Fragment implements LoaderManager.LoaderCallba
             @Override
             public void onClick(View v) {
 
-                startActivity(new Intent(getActivity().getApplicationContext(), MapsActivity.class));
+                startActivity(new Intent(getActivity().getApplicationContext(), MapsActivity2.class));
                 /*BasemapsDialogFragment basemapsFrag = new BasemapsDialogFragment();
                 basemapsFrag.setBasemapsDialogListener(new BasemapsDialogFragment.BasemapsDialogListener() {
 

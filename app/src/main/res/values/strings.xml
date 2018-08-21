@@ -158,5 +158,6 @@
     <string name="search">Search</string>
     <string name="usernameLabel">Username</string>
     <string name="passwordLabel">Password</string>
+    <string name="title_activity_maps2">Map</string>
 
 </resources>

@@ -61,7 +61,10 @@
             android:name=".FetchAddressIntentService"
             android:exported="false" />
 
-        <activity android:name=".SurveyActivity"></activity>
+        <activity android:name=".SurveyActivity" />
+        <activity
+            android:name=".util.MapsActivity2"
+            android:label="@string/title_activity_maps2"></activity>
     </application>
 
 </manifest>
