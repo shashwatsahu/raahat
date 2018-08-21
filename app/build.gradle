@@ -16,15 +16,24 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions {
+    /* compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }*/
+
+    packagingOptions {
+        pickFirst 'lib/armeabi-v7a/libassmidi.so'
+        pickFirst 'lib/x86/libassmidi.so'
+        pickFirst 'lib/x86/libruntimecore_java.so'
+        pickFirst 'lib/armeabi-v7a/libruntimecore_java.so'
+        exclude 'META-INF/LGPL2.1'
     }
 
+    useLibrary 'org.apache.http.legacy'
+    resourcePrefix 'bottomsheet_'
 }
 
 dependencies {
-    implementation 'com.esri.arcgisruntime:arcgis-android:100.3.0'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
@@ -36,5 +45,11 @@ dependencies {
     implementation 'com.android.support:cardview-v7:27.1.1'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.google.android.gms:play-services:12.0.1'
+    implementation 'com.esri.arcgisruntime:arcgis-android:100.3.0'
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient-android', version: '4.3.5.1'
+    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+    implementation 'com.github.Kennyc1012:BottomSheet:2.4.1'
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
 }

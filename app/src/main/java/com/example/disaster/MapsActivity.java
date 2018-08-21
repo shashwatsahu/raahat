@@ -1,183 +1,166 @@
 package com.example.disaster;
 
-import com.esri.arcgisruntime.mapping.ArcGISMap;
-import com.esri.arcgisruntime.mapping.Basemap;
-import com.esri.arcgisruntime.mapping.view.MapView;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.ImageButton;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.esri.arcgisruntime.data.ServiceFeatureTable;
+import com.esri.arcgisruntime.geometry.Point;
+import com.esri.arcgisruntime.geometry.SpatialReferences;
+import com.esri.arcgisruntime.layers.FeatureLayer;
+import com.esri.arcgisruntime.mapping.ArcGISMap;
+import com.esri.arcgisruntime.mapping.ArcGISScene;
+import com.esri.arcgisruntime.mapping.ArcGISTiledElevationSource;
+import com.esri.arcgisruntime.mapping.Basemap;
+import com.esri.arcgisruntime.mapping.Viewpoint;
+import com.esri.arcgisruntime.mapping.view.Camera;
+import com.esri.arcgisruntime.mapping.view.Graphic;
+import com.esri.arcgisruntime.mapping.view.GraphicsOverlay;
+import com.esri.arcgisruntime.mapping.view.MapView;
+import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, LocationListener {
+/**
+ * This sample demonstrates how to use information from a GEOJson feed. For this
+ * example, seven days significant earthquakes feed from USGS is used which is
+ * updated every minute. Json parser is used to parse the GEOJson feed.
+ *
+ */
 
-    private static final String TAG = "MapsActivity";
+public class MapsActivity extends AppCompatActivity implements ItemAdapter.ItemListener{
+
+    private static final String TAG = "MAPSACTIVITY";
+    private boolean flag = false;
+
     private MapView mMapView;
-    private double lat, lon;
 
-    private String shopName;
-
-    private GoogleMap mMap;
-    Circle circle;
-    Marker marker;
-    private Location location;
-
-    NotificationManager manager;
-    private AddressResultReceiver mResultReceiver;
-
-    private HashMap<String, Float> shopMap;
-
-    ArrayList<String> customerArray;
-
-    private FusedLocationProviderClient mFusedLocation;
-    private LocationManager locationManager;
-    private String provider;
+    BottomSheetBehavior behavior;
+    RecyclerView recyclerView;
+    private ItemAdapter mAdapter;
+    CoordinatorLayout coordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        mMapView = findViewById(R.id.map_view);
 
-        mMapView = findViewById(R.id.mapView);
-        ArcGISMap map = new ArcGISMap(Basemap.Type.TOPOGRAPHIC, 23.2315017, 77.4574933, 16);
-        mMapView.setMap(map);
-        Log.i(TAG, "onCreate");
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.activity_map);
 
-       /* mResultReceiver = new AddressResultReceiver(new Handler());
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        ArrayList<String> items = new ArrayList<>();
+        items.add("Rescue operator");
+        items.add("Medical camps");
 
-        mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
+        mAdapter = new ItemAdapter(items, this);
+        recyclerView.setAdapter(mAdapter);
 
-        if (location != null) {
-            //startIntentService();
-            Log.i(TAG, "location not null");
-            return;
-        } else
-            Log.i(TAG, "Location is null");
+        ImageButton button =  findViewById(R.id.bottom_list);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            // public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                       int[] grantResults)
-            Log.i(TAG, "permission!");
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        mFusedLocation.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSuccess(Location location) {
-                if (location != null) {
-                    System.out.println("Provider " + provider + " has been selected.");
-                    lat = location.getLatitude();
-                    lon = location.getLongitude();
-                    // onLocationChanged(location);
-                } else {
-                    //latituteField.setText("Location not available");
-                    //longitudeField.setText("Location not available");
-                    Log.i(TAG, "location not available");
+            public void onClick(View view) {
+
+                if(!flag) {
+                    behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    flag = true;
                 }
+                else {
+                    behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    flag = false;
+                }
+
             }
         });
 
-        Log.i(TAG, "second");
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        mapFragment.getMapAsync(this);
+        View bottomSheet = findViewById(R.id.bottom_sheet);
+        behavior = BottomSheetBehavior.from(bottomSheet);
+        behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                // React to state change
+                Log.i(TAG, " on state changed");
+            }
 
-        /*Criteria criteria = new Criteria();
-        provider = locationManager.getBestProvider(criteria, false);
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                // React to dragging events
+            }
+        });
+
+        ArcGISMap map = new ArcGISMap(Basemap.createImagery());
+
+        Point point = new Point(-226773, 6550477, SpatialReferences.getWebMercator());
+        Viewpoint vp = new Viewpoint(point, 7500);
+
+        // set initial map extent
+        map.setInitialViewpoint(vp);
+
+        setupMap();
+
+        addTrailheadsLayer();
+
+        // create a new graphics overlay and add it to the mapview
+        GraphicsOverlay graphicsOverlay = new GraphicsOverlay();
+        mMapView.getGraphicsOverlays().add(graphicsOverlay);
+
+        //create a simple marker symbol
+        SimpleMarkerSymbol symbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE, Color.RED,
+                12); //size 12, style of circle
+
+        //add a new graphic with a new point geometry
+        Point graphicPoint = new Point(-226773, 6550477, SpatialReferences.getWebMercator());
+        Graphic graphic = new Graphic(graphicPoint, symbol);
+        graphicsOverlay.getGraphics().add(graphic);
+
+    }
+
+    private void setupMap() {
+            if (mMapView != null) {
+                Basemap.Type basemapType = Basemap.Type.STREETS_VECTOR;
+                double latitude = 34.05293;
+                double longitude = -118.24368;
+                int levelOfDetail = 11;
+                ArcGISMap map = new ArcGISMap(basemapType, latitude, longitude, levelOfDetail);
+                mMapView.setMap(map);
+            }
         }
-        Location location = locationManager.getLastKnownLocation(provider);
 
-        // Initialize the location fields
-        if (location != null) {
-            System.out.println("Provider " + provider + " has been selected.");
-            onLocationChanged(location);
-        } else {
-            //latituteField.setText("Location not available");
-            //longitudeField.setText("Location not available");
-            Log.i(TAG, "location not available");
-        }*/
+    private void addTrailheadsLayer() {
+        String url = "https://services3.arcgis.com/GVgbJbqm8hXASVYi/arcgis/rest/services/Trailheads/FeatureServer/";
+        ServiceFeatureTable serviceFeatureTable = new ServiceFeatureTable(url);
+        FeatureLayer featureLayer = new FeatureLayer(serviceFeatureTable);
+        ArcGISMap map = mMapView.getMap();
+        map.getOperationalLayers().add(featureLayer);
+    }
 
-        //new one
-
-        // final LatLng dangerous = new LatLng(23.2315017, 77.4574933);
-
+    private void setElevationSource(ArcGISScene scene) {
+        ArcGISTiledElevationSource elevationSource = new ArcGISTiledElevationSource(
+                "http://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer");
+        scene.getBaseSurface().getElevationSources().add(elevationSource);
     }
 
     @Override
-    public void onLocationChanged(Location location) {
-        Log.i(TAG, "onLocationChanged");
-        lat = location.getLatitude();
-        lon = location.getLongitude();
-        LatLng dangerous = new LatLng(lat, lon);
-
-    }
-
-    @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String s) {
-        Toast.makeText(this, "Enabled new provider " + provider,
-                Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onProviderDisabled(String s) {
-        Toast.makeText(this, "Disabled provider " + provider,
-                Toast.LENGTH_SHORT).show();
-
-    }
-
-    @Override
-    protected void onPause(){
-        mMapView.pause();
+    protected void onPause() {
         super.onPause();
+        mMapView.pause();
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         mMapView.resume();
     }
@@ -188,93 +171,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMapView.dispose();
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        Log.i(TAG, "on map ready");
-        mMap = googleMap;
+    public void onItemClick(String item) {
 
-        lat = 23.236276;
-        lon = 77.457672;
+        Snackbar.make(coordinatorLayout,item + " is selected", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
 
-        LatLng dangerous = new LatLng(lat, lon);
-        // Add a marker in current position...
-        mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title("Me!"));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lon), 15.0f));
-
-        circle = mMap.addCircle(new CircleOptions().center(dangerous).radius(1500).strokeColor(Color.BLUE).fillColor(0x220000FF)
-                .strokeWidth(5.0f));
+        behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
-    private void sendNotification(String title, String content) {
-        long[] num = new long[1];
-        num[0] = 1000;
-        Notification.Builder builder = new Notification.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher_round)
-                .setContentTitle(title)
-                .setContentText(content).setVibrate(num);
-        NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-        Intent intent = new Intent(this, MapsActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-        builder.setContentIntent(contentIntent);
-        Notification notification = builder.build();
-
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-        notification.defaults |= Notification.DEFAULT_SOUND;
-        manager.notify(new Random().nextInt(), notification);
-
-    }
-
-    @Override
-    public boolean onMarkerClick(Marker marker) {
-        Log.i(TAG, "marker Id" + marker.getId());
-        return true;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-    private class AddressResultReceiver extends android.os.ResultReceiver {
-
-        AddressResultReceiver(Handler handler) {
-            super(handler);
-        }
-
-        @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
-           /* mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
-
-            displayAddressOutput();
-
-            if(resultCode == Constants.SUCCESS_RESULT){
-                showLog(getString(R.string.address_found));
-
-                strings = resultData.getStringArray(Constants.LIST_OF_DATA);
-                if(strings != null) {
-                    Log.i(TAG, "Lat" + strings[1] + " Lon: " + strings[2]);
-                    address.setText(strings[0]);
-                    state.setText(strings[6]);
-                    country.setText(strings[7]);
-                    city.setText(strings[8]);
-                }
-            }
-
-            mAddressRequested = false;
-            //updateUIWidgets();
-
-        }*/
-        }
-
-
-    }
 }
