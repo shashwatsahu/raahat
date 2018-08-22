@@ -128,6 +128,8 @@ public class HomeActivity extends Fragment implements LoaderManager.LoaderCallba
         //todo URL
 
         Button helpMeBtn = rootView.findViewById(R.id.help_me_btn);
+
+        //initialize current location...
         mResultReceiver = new AddressResultReceiver(new Handler());
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity().getApplicationContext());
 
