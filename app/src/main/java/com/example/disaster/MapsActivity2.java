@@ -1,6 +1,8 @@
 package com.example.disaster;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.location.Location;
 import android.support.annotation.Keep;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.util.Log;
 import com.example.disaster.KeyValue;
 import com.example.disaster.R;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
@@ -25,10 +28,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallback,LocationListener {
 
     private static final String TAG = "Mapsactivity2";
     private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 101;
+    private CameraPosition cameraPosition;
+    private SupportMapFragment mapFragment;
 
     private GoogleMap mMap;
     double lat, lng;
@@ -46,7 +51,7 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
         }
 
          // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map2);
         mapFragment.getMapAsync(this);
 
@@ -57,7 +62,28 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
             @Override
             public void onPlaceSelected(Place place) {
                 // TODO: Get info about the selected place.
-                Log.i(TAG, "Place: " + place.getName());
+                Log.i(TAG, "Place1: " + place.getName());
+                LatLng latLng = place.getLatLng();
+
+                lat = latLng.latitude;
+                lng = latLng.longitude;
+
+                cameraPosition = new CameraPosition.Builder()
+                        .target(latLng)      // Sets the center of the map to Mountain View
+                        .zoom(17)                   // Sets the zoom
+                        .bearing(90)                // Sets the orientation of the camera to east
+                        .tilt(30)                   // Sets the tilt of the camera to 30 degrees
+                        .build();
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                mMap.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .alpha(0.8f)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                        .anchor(0.0f, 1.0f)
+                        .title("Your position :\n ")
+                        .snippet(lat + " and " + lng));
+                Log.i(TAG, "lat:" + latLng.latitude + " long:" + latLng.longitude);
+
             }
 
             @Override
@@ -83,7 +109,7 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
         mMap = googleMap;
 
         LatLng SYDNEY = new LatLng(-33.88,151.21);
-        LatLng MOUNTAIN_VIEW = new LatLng(lat, lng);
+        LatLng CURRENTLATLNG = new LatLng(lat, lng);
 
  // Obtain the map from a MapFragment or MapView.
 
@@ -97,15 +123,20 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
         mMap.animateCamera(CameraUpdateFactory.zoomTo(14), 5000, null);
 
 // Construct a CameraPosition focusing on Mountain View and animate the camera to that position.
-        CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(MOUNTAIN_VIEW)      // Sets the center of the map to Mountain View
+         cameraPosition = new CameraPosition.Builder()
+                .target(CURRENTLATLNG)      // Sets the center of the map to Mountain View
                 .zoom(17)                   // Sets the zoom
                 .bearing(90)                // Sets the orientation of the camera to east
                 .tilt(30)                   // Sets the tilt of the camera to 30 degrees
                 .build();                   // Creates a CameraPosition from the builder
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        mMap.addMarker(new MarkerOptions().position(MOUNTAIN_VIEW));
-
+        mMap.addMarker(new MarkerOptions()
+                .position(CURRENTLATLNG)
+                .alpha(0.8f)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .anchor(0.0f, 1.0f)
+                .title("Your position :\n ")
+                .snippet(lat + " and " + lng));
     }
 
     @Override
@@ -113,8 +144,6 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(this, data);
-                LatLng latLng = place.getLatLng();
-
                 Log.i(TAG, "Place: " + place.getName());
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
@@ -127,4 +156,8 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
         }
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
 }
