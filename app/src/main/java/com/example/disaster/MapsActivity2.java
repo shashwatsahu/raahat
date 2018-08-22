@@ -1,6 +1,7 @@
 package com.example.disaster;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -15,6 +16,8 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,10 +76,34 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps2);
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.safe_dialog);
+
+        Button denyBtn = (Button) dialog.findViewById(R.id.deny_safe_btn);
+        denyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        Button confirmBtn = dialog.findViewById(R.id.confirm_safe_bnt);
+        confirmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        dialog.show();
+
+
         double[] latLng = getIntent().getDoubleArrayExtra(KeyValue.LATLNG);
         mResultReceiver = new AddressResultReceiver(new Handler());
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
 
         if(latLng != null) {
             lat = latLng[1];
@@ -348,6 +375,7 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
                     lat = Double.parseDouble(strings[2]);
                     lng = Double.parseDouble(strings[1]);
 
+                    //changing the location...
                     LatLng latLng1 = new LatLng(lat, lng);
 
                     cameraPosition = new CameraPosition.Builder()
