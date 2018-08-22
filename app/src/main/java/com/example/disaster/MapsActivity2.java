@@ -1,5 +1,6 @@
 package com.example.disaster;
 
+import android.content.Intent;
 import android.support.annotation.Keep;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -7,18 +8,27 @@ import android.util.Log;
 
 import com.example.disaster.KeyValue;
 import com.example.disaster.R;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.internal.IGoogleMapDelegate;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallback {
 
     private static final String TAG = "Mapsactivity2";
+    private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 101;
 
     private GoogleMap mMap;
     double lat, lng;
@@ -30,8 +40,8 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
         double[] latLng = getIntent().getDoubleArrayExtra(KeyValue.LATLNG);
 
         if(latLng != null) {
-            lat = latLng[0];
-            lng = latLng[1];
+            lat = latLng[1];
+            lng = latLng[0];
             Log.i(TAG, "size:" + latLng.length);
         }
 
@@ -39,6 +49,23 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map2);
         mapFragment.getMapAsync(this);
+
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                Log.i(TAG, "Place: " + place.getName());
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
 
     }
 
@@ -56,7 +83,7 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
         mMap = googleMap;
 
         LatLng SYDNEY = new LatLng(-33.88,151.21);
-        LatLng MOUNTAIN_VIEW = new LatLng(37.4, -122.1);
+        LatLng MOUNTAIN_VIEW = new LatLng(lat, lng);
 
  // Obtain the map from a MapFragment or MapView.
 
@@ -67,7 +94,7 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
         mMap.animateCamera(CameraUpdateFactory.zoomIn());
 
 // Zoom out to zoom level 10, animating with a duration of 2 seconds.
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(14), 5000, null);
 
 // Construct a CameraPosition focusing on Mountain View and animate the camera to that position.
         CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -77,7 +104,27 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
                 .tilt(30)                   // Sets the tilt of the camera to 30 degrees
                 .build();                   // Creates a CameraPosition from the builder
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        mMap.addMarker(new MarkerOptions().position(MOUNTAIN_VIEW));
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlaceAutocomplete.getPlace(this, data);
+                LatLng latLng = place.getLatLng();
+
+                Log.i(TAG, "Place: " + place.getName());
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(this, data);
+                // TODO: Handle the error.
+                Log.i(TAG, status.getStatusMessage());
+
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }
     }
 
 }
