@@ -238,8 +238,7 @@ public class HomeActivity extends Fragment implements LoaderManager.LoaderCallba
         droneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BasemapsDialogFragment basemapsDialogFragment = new BasemapsDialogFragment();
-                basemapsDialogFragment.show(getActivity().getFragmentManager(), "BaseMap");
+               startActivity(new Intent(getActivity(), DroneActivity.class));
             }
         });
 

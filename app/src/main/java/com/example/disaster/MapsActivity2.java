@@ -10,14 +10,20 @@ import android.location.Location;
 import android.os.Handler;
 import android.support.annotation.Keep;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,7 +51,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallback {
+import java.util.ArrayList;
+
+public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallback, ItemAdapter.ItemListener {
 
     private static final String TAG = "Mapsactivity2";
     private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 101;
@@ -53,12 +61,21 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
     private static final String ADDRESS_REQUEST_KEY = "address-request-pending";
     private static final String LOCATION_ADDRESS_KEY = "location-address";
 
-
+    private MarkerOptions markerOptions;
     private CameraPosition cameraPosition;
     private SupportMapFragment mapFragment;
     private String[] strings;
     private Location location;
     private boolean mAddressRequested;
+
+    private CoordinatorLayout coordinatorLayout;
+    private RecyclerView recyclerView;
+    private ItemAdapter mAdapter;
+    boolean flag = false;
+    BottomSheetBehavior behavior;
+    BottomSheetBehavior behaviorAdd;
+
+    private Marker marker;
 
     private String address, state, city, country;
 
@@ -77,29 +94,92 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps2);
 
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.safe_dialog);
+        final Dialog situationDialog = new Dialog(this);
+        situationDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        situationDialog.setCancelable(false);
+        situationDialog.setContentView(R.layout.safe_dialog);
 
-        Button denyBtn = (Button) dialog.findViewById(R.id.deny_safe_btn);
-        denyBtn.setOnClickListener(new View.OnClickListener() {
+        View bottomSheet1 = findViewById(R.id.bottom_sheet);
+
+        behavior = BottomSheetBehavior.from(bottomSheet1);
+
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.activity_map);
+
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+       /* CoordinatorLayout coordinatorLayout = new CoordinatorLayout(this);
+        View addBottomSheet = coordinatorLayout.findViewById(R.id.add_products_co);
+        behaviorAdd = BottomSheetBehavior.from(addBottomSheet);*/
+
+        ImageButton addBtn = findViewById(R.id.add_products);
+        addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
+              startActivity(new Intent(MapsActivity2.this, DroneActivity.class));
             }
         });
 
-        Button confirmBtn = dialog.findViewById(R.id.confirm_safe_bnt);
-        confirmBtn.setOnClickListener(new View.OnClickListener() {
+        ArrayList<String> items = new ArrayList<>();
+        items.add("Rescue operator");
+        items.add("Medical camps");
+
+        mAdapter = new ItemAdapter(items, this);
+        recyclerView.setAdapter(mAdapter);
+
+        ImageButton bottomSheetBtn =  findViewById(R.id.bottom_list);
+
+        bottomSheetBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                if(!flag) {
+                    behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    flag = true;
+                }
+                else {
+                    behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    flag = false;
+                }
+
             }
         });
 
-        dialog.show();
+        behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                // React to state change
+                Log.i(TAG, " on state changed");
+            }
 
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                // React to dragging events
+            }
+        });
+
+        Button denyBtn = situationDialog.findViewById(R.id.deny_safe_btn);
+        denyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                marker.setTag( KeyValue.NOTSAFE);
+                situationDialog.dismiss();
+            }
+        });
+
+        Button confirmBtn = situationDialog.findViewById(R.id.confirm_safe_bnt);
+        confirmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                marker.setTag(KeyValue.SAFE);
+                situationDialog.dismiss();
+            }
+        });
+
+        situationDialog.show();
 
         double[] latLng = getIntent().getDoubleArrayExtra(KeyValue.LATLNG);
         mResultReceiver = new AddressResultReceiver(new Handler());
@@ -111,7 +191,7 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
             Log.i(TAG, "size:" + latLng.length);
         }
 
-        FloatingActionButton floatingActionButton = findViewById(R.id.current_location_btn);
+        ImageButton floatingActionButton = findViewById(R.id.current_location_btn);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -133,7 +213,6 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
                     Log.i(TAG, "Location is null");
 
                 mAddressRequested = true;
-
             }
         });
 
@@ -162,13 +241,7 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
                         .tilt(30)                   // Sets the tilt of the camera to 30 degrees
                         .build();
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                mMap.addMarker(new MarkerOptions()
-                        .position(latLng)
-                        .alpha(0.8f)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
-                        .anchor(0.0f, 1.0f)
-                        .title("Your position :\n ")
-                        .snippet(lat + " and " + lng));
+                marker.setPosition(latLng);
                 Log.i(TAG, "lat:" + latLng.latitude + " long:" + latLng.longitude);
 
             }
@@ -304,13 +377,16 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
                 .tilt(30)                   // Sets the tilt of the camera to 30 degrees
                 .build();                   // Creates a CameraPosition from the builder
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        mMap.addMarker(new MarkerOptions()
+
+        markerOptions = new MarkerOptions()
                 .position(CURRENTLATLNG)
                 .alpha(0.8f)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
                 .anchor(0.0f, 1.0f)
                 .title("Your position :\n ")
-                .snippet(lat + " and " + lng));
+                .snippet(lat + " and " + lng);
+
+        marker = mMap.addMarker(markerOptions);
     }
 
     private void updateValuesFromBundle(Bundle savedInstanceState) {
@@ -349,6 +425,23 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
          Log.i(TAG, "1String:" + mAddressOutput);
     }
 
+    @Override
+    public void onItemClick(String item) {
+
+        switch (item){
+            case "Rescue operator":
+                flag = false;
+                behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                break;
+
+            case "Medical camps":
+                flag = false;
+                behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                break;
+        }
+
+    }
+
     private class AddressResultReceiver extends android.os.ResultReceiver {
 
         AddressResultReceiver(Handler handler){
@@ -385,13 +478,9 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
                             .tilt(30)                   // Sets the tilt of the camera to 30 degrees
                             .build();
                     mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                    mMap.addMarker(new MarkerOptions()
-                            .position(latLng1)
-                            .alpha(0.8f)
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
-                            .anchor(0.0f, 1.0f)
-                            .title("Your position :\n ")
-                            .snippet(lat + " and " + lng));
+                    //mMap.addMarker(markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                    //.position(latLng1));
+                    marker.setPosition(latLng1);
                     Log.i(TAG, "lat:" + latLng1.latitude + " long:" + latLng1.longitude);
 
                     Toast.makeText(getApplicationContext(), address + " " + city + " " + state + " " + country
