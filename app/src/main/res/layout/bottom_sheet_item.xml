@@ -1,0 +1,22 @@
+<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:id="@+id/rl_car"
+    android:padding="10dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:ignore="ResourceName">
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/textView"
+    android:textSize="16sp"
+    android:textColor="@color/black_35"
+    android:layout_centerInParent="true"/>
+
+</RelativeLayout>
+
+
+
+
+

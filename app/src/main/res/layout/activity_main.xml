@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@android:color/transparent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    tools:ignore="ResourceName">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -22,24 +23,13 @@
             android:background="@android:color/transparent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/floating_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:src="@drawable/ic_call"
-            android:layout_above="@id/tab_layout"
-            app:fabSize="normal"
-            android:layout_margin="16dp" />
-
             <android.support.design.widget.TabLayout
                 android:id="@+id/tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:elevation="0dp"
                 android:layout_alignParentBottom="true"
-                android:background="@android:color/holo_green_light" />
+                android:background="@drawable/gradient" />
     </RelativeLayout>
 
 </LinearLayout>

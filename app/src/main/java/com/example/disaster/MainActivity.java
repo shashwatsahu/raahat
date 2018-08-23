@@ -15,7 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
-    private FloatingActionButton floatingActionButton;
 
     private TabLayout.Tab homeTab, notificationTab, accountTab;
 
@@ -43,24 +41,6 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
         tabLayout = findViewById(R.id.tab_layout);
 
-        floatingActionButton = findViewById(R.id.floating_btn);
-
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // Intent intent = new Intent(MainActivity.this, ShopsCategory.class);
-                //startActivity(intent);
-                //  startActivity(new Intent(MainActivity.this, ScannedBarcodeActivity.class));
-       
-                Log.i(TAG,"fab");
-
-                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + "1070"));
-
-                startActivity(intent);
-            }
-        });
-
         tab();
     }
 
@@ -77,17 +57,14 @@ public class MainActivity extends AppCompatActivity {
                 switch(tab.getPosition()){
                     case 0:
                         homeTab.setIcon(R.drawable.ic_home);
-                        floatingActionButton.setVisibility(View.VISIBLE);
                         break;
 
                     case 1:
                         notificationTab.setIcon(R.drawable.ic_notification);
-                        floatingActionButton.setVisibility(View.INVISIBLE);
                         break;
 
                     case 2:
                         accountTab.setIcon(R.drawable.ic_account);
-                        floatingActionButton.setVisibility(View.INVISIBLE);
                         break;
                 }
 

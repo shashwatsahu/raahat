@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- TODO: add your customized values here-->
+    <string name="client_id"></string>
+
+    <!-- This redirect URI is the default value for https://www.arcgis.com -->
+    <string name="redirect_uri">my-ags-app://auth</string>
+
+    <string name="testPartialName">goo</string>
+    <string name="localAddressNearYou">1005 W Burnside Ave Portland OR</string>
+</resources>
