@@ -1,5 +1,5 @@
-<resources>
-    <string name="app_name">Raahat</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name" tools:ignore="ResourceName">Raahat</string>
     <string name="app">hello</string>
     <string name="title_activity_maps">Map</string>
 
@@ -59,6 +59,23 @@
     <string name="earthquake_url"></string>
 
     <string name="basemap_thumbnail">basemap thumbnail</string>
+
+    <string name="Upload">Upload</string>
+    <string name="Error">Error</string>
+    <string name="Complete">Complete</string>
+    <string name="IndeterminateProgressSample">Indeterminate Progress Sample</string>
+    <string name="IntegerProgressSample">Integer Progress Sample</string>
+    <string name="StateChangeSample">State Change Sample</string>
+    <string name="ProgressPaddingSample">Progress Padding Sample</string>
+    <string name="CustomSelectorSample">Custom Selector Sample</string>
+
+    <array name="sample_list">
+        <item>@string/IndeterminateProgressSample</item>
+        <item>@string/IntegerProgressSample</item>
+        <item>@string/StateChangeSample</item>
+        <item>@string/ProgressPaddingSample</item>
+        <item>@string/CustomSelectorSample</item>
+    </array>
 
     <!-- navigation drawer -->
     <string name="navigation_drawer_close">Close navigation drawer</string>

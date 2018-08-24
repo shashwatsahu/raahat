@@ -6,11 +6,11 @@
     tools:ignore="ResourceName">
 
     <solid
-        android:color="@android:color/holo_green_dark"/>
+        android:color="@android:color/darker_gray"/>
 
-   <corners
-       android:topRightRadius="16dp"
-       android:bottomRightRadius="16dp"
-       android:topLeftRadius="16dp"
-       android:bottomLeftRadius="16dp"/>
+    <corners
+        android:topRightRadius="16dp"
+        android:bottomRightRadius="16dp"
+        android:topLeftRadius="16dp"
+        android:bottomLeftRadius="16dp"/>
 </shape>
