@@ -39,10 +39,10 @@ public class DroneActivity extends AppCompatActivity implements RecyclerView.OnI
         setContentView(R.layout.activity_drone);
         ArrayList<Product> productArrayList = new ArrayList<Product>();
 
-        productArrayList.add(new Product("Food Packets", R.drawable.food_packet));
-        productArrayList.add(new Product("Mineral Water", R.drawable.water_bottle));
-        productArrayList.add(new Product("Medicines", R.drawable.medical_tablets));
-        productArrayList.add(new Product("Milk", R.drawable.milk));
+        productArrayList.add(new Product("Food Packets", R.drawable.food_packet, 0));
+        productArrayList.add(new Product("Mineral Water", R.drawable.water_bottle, 0));
+        productArrayList.add(new Product("Medicines", R.drawable.medical_tablets, 0));
+        productArrayList.add(new Product("Milk", R.drawable.milk, 0));
 
         myAdapter = new ProductRecyclerAdapter(this, productArrayList);
 
@@ -52,6 +52,20 @@ public class DroneActivity extends AppCompatActivity implements RecyclerView.OnI
 
         recyclerView.addOnItemTouchListener(this);
         gestureDetectorCompat = new GestureDetectorCompat(getApplicationContext(), new RecyclerViewDemoOnGestureListener());
+
+        Button submit = findViewById(R.id.submit_btn);
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i(TAG, "submit btn");
+                if(myAdapter.getSelectedItems().size() > 0){
+                    for (int i = 0; i < myAdapter.getSelectedItems().size(); i++){
+                        Product product = myAdapter.getSelectedItems().get(i);
+                        Log.i(TAG, "name:" + product.getProductName() + " order:" + product.getOrders());
+                    }
+                }
+            }
+        });
 
     }
 

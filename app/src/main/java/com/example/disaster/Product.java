@@ -2,10 +2,20 @@ package com.example.disaster;
 
 public class Product {
     String productName;
-    int imgDrawable;
-    public Product(String productName, int productImage){
+    int imgDrawable, orders;
+
+    public int getOrders() {
+        return orders;
+    }
+
+    public void setOrders(int orders) {
+        this.orders = orders;
+    }
+
+    public Product(String productName, int productImage, int orders){
         imgDrawable = productImage;
         this.productName = productName;
+        this.orders = orders;
     }
 
     public String getProductName() {
