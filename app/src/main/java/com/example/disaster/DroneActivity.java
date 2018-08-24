@@ -32,6 +32,7 @@ public class DroneActivity extends AppCompatActivity implements RecyclerView.OnI
     private SparseBooleanArray selectedItems;
     private static final String TAG = "DRONEACTIVITY";
     private ProductRecyclerAdapter myAdapter;
+    private Button submit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +54,7 @@ public class DroneActivity extends AppCompatActivity implements RecyclerView.OnI
         recyclerView.addOnItemTouchListener(this);
         gestureDetectorCompat = new GestureDetectorCompat(getApplicationContext(), new RecyclerViewDemoOnGestureListener());
 
-        Button submit = findViewById(R.id.submit_btn);
+        submit = findViewById(R.id.submit_btn);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,26 +67,12 @@ public class DroneActivity extends AppCompatActivity implements RecyclerView.OnI
                 }
             }
         });
-
     }
 
     private void myToggleSelection(int idx){
-        Button button = findViewById(R.id.submit_btn);
 
-        myAdapter.toggleSelection(idx);
-        int selectedOrders = myAdapter.getSelectedItemCount();
-        Log.i(TAG, "Selected:" + selectedOrders);
-        if(selectedOrders > 0){
-            button.setVisibility(View.VISIBLE);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+       myAdapter.toggleSelection(idx);
 
-                }
-            });
-        }else{
-            button.setVisibility(View.INVISIBLE);
-        }
         //todo String title = getString(R.string.selected_counts, getSelectedItemCount());
         //  actionMode.setTitle(title);
         Log.i(TAG, "myToggleSelection:" + idx);
@@ -109,7 +96,17 @@ public class DroneActivity extends AppCompatActivity implements RecyclerView.OnI
 
     @Override
     public void onClick(View view) {
-
+            switch (view.getId()){
+                case R.id.submit_btn:
+                    Log.i(TAG, "submit btn");
+                    if(myAdapter.getSelectedItems().size() > 0){
+                        for (int i = 0; i < myAdapter.getSelectedItems().size(); i++){
+                            Product product = myAdapter.getSelectedItems().get(i);
+                            Log.i(TAG, "name:" + product.getProductName() + " order:" + product.getOrders());
+                        }
+                    }
+                break;
+            }
     }
 
     private class RecyclerViewDemoOnGestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -125,9 +122,29 @@ public class DroneActivity extends AppCompatActivity implements RecyclerView.OnI
 
                 idx = recyclerView.getChildAdapterPosition(view);
                 int idL = recyclerView.getChildLayoutPosition(view);
-                Log.i(TAG, "on Long click:" + view.getId() + " idA :" + idx + " idL :" + idL);
                 myToggleSelection(idx);
+
+                int selectedOrders = myAdapter.getSelectedItems().size();
+
+                Log.i(TAG, "Selected:" + selectedOrders);
+                if(selectedOrders > 0){
+                    submit.setVisibility(View.VISIBLE);
+                    submit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    });
+                }else{
+                    submit.setVisibility(View.INVISIBLE);
+                }
+
             }
+
+            if(myAdapter.getSelectedItemCount() > 0){
+                submit.setVisibility(View.VISIBLE);
+            }else
+                submit.setVisibility(View.GONE);
 
             return super.onSingleTapConfirmed(e);
         }

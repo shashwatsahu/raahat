@@ -22,14 +22,30 @@ import java.util.List;
 public class ProductRecyclerAdapter extends RecyclerView.Adapter<ProductRecyclerAdapter.ProductViewHolder> implements View.OnClickListener{
     private Context context;
     private ArrayList<Product> products;
-    private SparseBooleanArray selectedItems;
+  //  private SparseBooleanArray selectedItems;
     private static final String TAG = "PRODUCTADAPTER";
     private int position;
+    ArrayList<Boolean> booleanArrayList;
 
     public ProductRecyclerAdapter(Context context, ArrayList<Product> products){
         this.context = context;
         this.products = products;
-        selectedItems = new SparseBooleanArray();
+
+         booleanArrayList = new ArrayList<>(products.size());
+        for (int i = 0; i< products.size(); i++){
+            booleanArrayList.add(i, false);
+        }
+        Log.i(TAG, "boolean array;" + booleanArrayList.size());
+
+      /* selectedItems = new SparseBooleanArray(products.size());
+
+        for(int i =0; i<products.size(); i++){
+           selectedItems.put(i, false);
+            }
+
+        for(int i =0; i<selectedItems.size(); i++){
+           Log.i(TAG, "selected bool:" + selectedItems.get(i));
+        }*/
 
         Log.i(TAG, "constructor:" + products.size());
     }
@@ -44,18 +60,14 @@ public class ProductRecyclerAdapter extends RecyclerView.Adapter<ProductRecycler
 
         final Product product = products.get(pos);
 
-        for (int i = 0; i < selectedItems.size();i++){
-            Log.i(TAG, "selected flag:" + selectedItems.get(i));
-        }
-
-        if(selectedItems.get(pos)){
+        if(booleanArrayList.get(pos)){
             Log.i(TAG, "if selected!");
             // the below line is commmented because i don't know!
             // selectedItems.delete(pos);
-            selectedItems.put(pos, false);
+         //   selectedItems.put(pos, false);
+            booleanArrayList.set(pos, false);
             product.setOrders(0);
             notifyItemChanged(pos);
-
         }
         else {
             Log.i(TAG, "else");
@@ -95,13 +107,16 @@ public class ProductRecyclerAdapter extends RecyclerView.Adapter<ProductRecycler
             confirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     String quantity = quantityEdit.getText().toString().trim();
                     int num = Integer.parseInt(quantity);
                     if(num > 0) {
                         product.setOrders(num);
-                        selectedItems.put(position, true);
-                        notifyItemChanged(position);
+
+                       booleanArrayList.set(position, true);
+                        notifyDataSetChanged();
                         situationDialog.dismiss();
+
                     }
                 }
             });
@@ -112,7 +127,6 @@ public class ProductRecyclerAdapter extends RecyclerView.Adapter<ProductRecycler
                 public void onClick(View view) {
                     product.setOrders(0);
                     notifyDataSetChanged();
-                    selectedItems.put(position, false);
                     situationDialog.dismiss();
                 }
             });
@@ -123,22 +137,22 @@ public class ProductRecyclerAdapter extends RecyclerView.Adapter<ProductRecycler
     }
 
     public int getSelectedItemCount(){
-        int sum= 0;
-        Log.i(TAG, "sparsearray:" + selectedItems.size());
-        for(int i = 0; i < selectedItems.size(); i++){
-            if(selectedItems.get(i)){
-                sum++;
+        int sum = 0;
+        Log.i(TAG, "sparsearray:" + booleanArrayList.size());
+        for(int i = 0; i < booleanArrayList.size(); i++){
+            if(booleanArrayList.get(i)){
+               sum++;
             }
         }
-        Log.i(TAG, "sum:" + sum);
+        Log.i(TAG, "selected order:" + sum);
         return sum;
     }
 
     public ArrayList<Product> getSelectedItems(){
        ArrayList<Product> productList = new ArrayList<Product>();
 
-        for(int i = 0; i < selectedItems.size(); i++){
-            if(selectedItems.get(i)){
+        for(int i = 0; i < booleanArrayList.size(); i++){
+            if(booleanArrayList.get(i)){
                 productList.add(products.get(i));
             }
         }
@@ -158,7 +172,6 @@ public class ProductRecyclerAdapter extends RecyclerView.Adapter<ProductRecycler
     @NonNull
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Log.i(TAG, "creatvh");
 
         View itemView = LayoutInflater.
                 from(parent.getContext()).
@@ -168,7 +181,6 @@ public class ProductRecyclerAdapter extends RecyclerView.Adapter<ProductRecycler
 
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
-        Log.i(TAG, "bind");
 
         Product product = products.get(position);
 
@@ -178,7 +190,7 @@ public class ProductRecyclerAdapter extends RecyclerView.Adapter<ProductRecycler
         holder.img.setImageDrawable(context.getDrawable(imgId));
         holder.nameTxt.setText(productName);
         holder.orderBtn.setTag((Integer) position);
-        holder.orderBtn.setBackground(selectedItems.get(position)? context.getDrawable(R.drawable.button)
+        holder.orderBtn.setBackground(booleanArrayList.get(position)? context.getDrawable(R.drawable.button)
                         : context.getDrawable(R.drawable.button_deselect));
 
         if(product.getOrders() > 0){
