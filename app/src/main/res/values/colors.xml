@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#4527a0</color>
-    <color name="colorPrimaryDark">#512da8</color>
+    <color name="colorPrimary">#03a9f4</color>
+    <color name="colorPrimaryDark">#007ac1</color>
    <!-- <color name="colorAccent">#5e35b1</color>-->
     <color name="colorPrimaryLight">#CFD8DC</color>
 
-    <color name="colorAccent">#512da8</color>
+    <color name="colorAccent">#3498DB</color>
     <color name="white">#ffffff</color>
     <color name="layout_background">#5e35b1</color>
 
@@ -69,4 +69,5 @@
 
     <!-- callout -->
     <color name="place_callout_frame_color">@color/colorPrimaryLight</color>
+    <color name="holo_green_light">#1faa00</color>
 </resources>

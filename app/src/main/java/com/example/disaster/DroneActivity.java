@@ -1,27 +1,30 @@
 package com.example.disaster;
 
-import android.animation.ValueAnimator;
-import android.app.ActionBar;
-import android.app.Dialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.transition.TransitionManager;
+
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import com.dd.CircularProgressButton;
-
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class DroneActivity extends AppCompatActivity implements RecyclerView.OnItemTouchListener, View.OnClickListener{
@@ -55,16 +58,18 @@ public class DroneActivity extends AppCompatActivity implements RecyclerView.OnI
         gestureDetectorCompat = new GestureDetectorCompat(getApplicationContext(), new RecyclerViewDemoOnGestureListener());
 
         submit = findViewById(R.id.submit_btn);
+        submit.setVisibility(View.VISIBLE);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
                 Log.i(TAG, "submit btn");
-                if(myAdapter.getSelectedItems().size() > 0){
-                    for (int i = 0; i < myAdapter.getSelectedItems().size(); i++){
-                        Product product = myAdapter.getSelectedItems().get(i);
-                        Log.i(TAG, "name:" + product.getProductName() + " order:" + product.getOrders());
-                    }
-                }
+
+                  //todo  HTTPAsyncTask httpAsyncTask = new HTTPAsyncTask();
+                  //todo httpAsyncTask.doInBackground();
+
+                  //  HttpPost("http://18.210.151.76/requirements");
             }
         });
     }
@@ -151,35 +156,93 @@ public class DroneActivity extends AppCompatActivity implements RecyclerView.OnI
 
     }
 
-    private void simulateSuccessProgress(final CircularProgressButton button) {
-        ValueAnimator widthAnimation = ValueAnimator.ofInt(1, 100);
-        widthAnimation.setDuration(1500);
-        widthAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
-        widthAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                Integer value = (Integer) animation.getAnimatedValue();
-                button.setProgress(value);
-            }
-        });
-        widthAnimation.start();
+    public boolean checkNetworkConnection() {
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        boolean isConnected = false;
+        if (networkInfo != null && (isConnected = networkInfo.isConnected())) {
+            // show "Connected" & type of network "WIFI or MOBILE"
+            Log.i(TAG, "connected!" + networkInfo.getTypeName());
+            // change background color to red
+
+        } else {
+            // show "Not Connected"
+            // change background color to green
+            Log.i(TAG, "disconnect!" + networkInfo.getTypeName());
+        }
+
+        return isConnected;
     }
 
-    private void simulateErrorProgress(final CircularProgressButton button) {
-        ValueAnimator widthAnimation = ValueAnimator.ofInt(1, 99);
-        widthAnimation.setDuration(1500);
-        widthAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
-        widthAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                Integer value = (Integer) animation.getAnimatedValue();
-                button.setProgress(value);
-                if (value == 99) {
-                    button.setProgress(-1);
+
+    private class HTTPAsyncTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            // params comes from the execute() call: params[0] is the url.
+            try {
+                try {
+                    urls[0] = "http://18.210.151.76/requirements";
+                    return HttpPost(urls[0]);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return "Error!";
                 }
+            } catch (IOException e) {
+                return "Unable to retrieve web page. URL may be invalid.";
             }
-        });
-        widthAnimation.start();
+        }
+        // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+           Log.i(TAG, "post execute:" + result);
+        }
+    }
+
+    private String HttpPost(String myUrl) throws IOException, JSONException {
+        String result = "";
+
+        URL url = new URL(myUrl);
+
+        // 1. create HttpURLConnection
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+
+        // 2. build JSON object
+        JSONObject jsonObject = buidJsonObject();
+
+        // 3. add JSON content to POST request body
+        setPostRequestContent(conn, jsonObject);
+
+        // 4. make POST request to the given URL
+        conn.connect();
+
+        // 5. return response message
+        return conn.getResponseMessage()+"";
+
+    }
+
+    private JSONObject buidJsonObject() throws JSONException {
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.accumulate("name", "shashwat");
+        jsonObject.accumulate("country",  "india");
+
+        return jsonObject;
+    }
+
+    private void setPostRequestContent(HttpURLConnection conn,
+                                       JSONObject jsonObject) throws IOException {
+
+        OutputStream os = conn.getOutputStream();
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+        writer.write(jsonObject.toString());
+        Log.i(MainActivity.class.toString(), jsonObject.toString());
+        writer.flush();
+        writer.close();
+        os.close();
     }
 
 }

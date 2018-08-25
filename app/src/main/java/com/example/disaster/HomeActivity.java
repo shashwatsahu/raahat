@@ -133,12 +133,19 @@ public class HomeActivity extends Fragment implements LoaderManager.LoaderCallba
         mResultReceiver = new AddressResultReceiver(new Handler());
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity().getApplicationContext());
 
-        Button surveyBtn = rootView.findViewById(R.id.survey_btn);
-
-        surveyBtn.setOnClickListener(new View.OnClickListener() {
+        ImageButton arcGisBtn = rootView.findViewById(R.id.arcgis_btn);
+        arcGisBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
+             startActivity(new Intent(getActivity().getApplicationContext(), ArcgisWeb.class));
+            }
+        });
 
+        ImageButton baseBtn = rootView.findViewById(R.id.base_map_btn);
+        baseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity().getApplicationContext(), BaseMap.class));
             }
         });
 
@@ -190,11 +197,14 @@ public class HomeActivity extends Fragment implements LoaderManager.LoaderCallba
             public void onClick(View v){
                 Toast.makeText(getActivity().getApplicationContext(),"Play",Toast.LENGTH_SHORT).show();
                 if(!flag_sound) {
+                    Log.i(TAG, "start");
                     mediaPlayer.start();
                     Log.i(TAG, "Activated:" + playButton.isEnabled());
                     flag_sound = true;
                 } else{
+                    Log.i(TAG, "stop");
                     mediaPlayer.stop();
+                    mediaPlayer.release();
                     flag_sound = false;
                 }
             }

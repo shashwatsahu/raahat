@@ -1,115 +1,233 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relative_layout_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient"
+    android:orientation="vertical"
     tools:context=".HomeActivity"
     tools:ignore="ResourceName">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:background="@android:color/transparent">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/gradient">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/app_img_id"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_centerHorizontal="true"
+            android:layout_toStartOf="@id/app_text_id"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/ic_raahat_new"/>
+
+        <TextView
+            android:id="@+id/app_text_id"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_info"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"/>
-
-            <ImageButton
-                android:id="@+id/map_btn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_map"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"/>
-
-            <ImageButton
-                android:id="@+id/alarm_btn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_siren"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"/>
-
-            <ImageButton
-                android:id="@+id/flash_btn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_flash"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"/>
-
-            <ImageButton
-                android:id="@+id/drone_btn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_quadcopter"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"/>
-
-        </LinearLayout>
-
-    </android.support.v7.widget.Toolbar>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        android:layout_below="@id/toolbar"
-        android:layout_above="@id/help_me_btn">
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="35dp"
+            android:text="Raahat"
+            android:textSize="18sp"
+            android:textColor="@color/white"/>
 
         <RelativeLayout
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/transparent">
 
-            <Button
-                android:id="@+id/survey_btn"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:background="@drawable/home_button"
-                android:text="survey"
-                android:elevation="12dp"
-                android:layout_margin="16dp"
-                android:textColor="@color/white"
-                />
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fillViewport="true"
+                android:measureAllChildren="false"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:layout_margin="8dp">
+
+                        <ImageButton
+                            android:id="@+id/map_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/icons8map_48"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:background="@android:color/transparent"/>
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:layout_margin="8dp">
+
+                        <ImageButton
+                            android:id="@+id/alarm_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/icons8_siren48"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:background="@android:color/transparent"/>
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:layout_margin="8dp">
+
+                        <ImageButton
+                            android:id="@+id/arcgis_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/toolbar"
+                            android:src="@drawable/icons8_map_pinpoint_48"
+                            android:background="@color/transparent"
+                            android:layout_margin="16dp"/>
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:layout_margin="8dp">
+
+                        <ImageButton
+                            android:id="@+id/drone_btn"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:src="@drawable/icons8_quadcopter_48"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:background="@android:color/transparent"/>
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:layout_margin="8dp">
+
+                        <ImageButton
+                            android:id="@+id/base_map_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/icons8_destination_48"
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:background="@android:color/transparent"/>
+
+                    </android.support.v7.widget.CardView>
+
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:layout_margin="8dp">
+
+                        <ImageButton
+                            android:id="@+id/flash_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/icons8_headlight_48"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:background="@android:color/transparent"/>
+
+                    </android.support.v7.widget.CardView>
+
+                </LinearLayout>
+
+
+            </HorizontalScrollView>
 
         </RelativeLayout>
 
-    </ScrollView>
+    </RelativeLayout>
 
-    <Button
-        android:id="@+id/help_me_btn"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Emergency"
-        android:textColor="@color/white"
-        android:textAllCaps="false"
-        android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@id/floating_btn"
-        android:layout_margin="16dp"
-        android:background="@drawable/rectangle"/>
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:background="@color/white">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floating_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:src="@drawable/ic_call"
-        android:layout_above="@id/tab_layout"
-        app:fabSize="normal"
-        android:layout_margin="16dp" />
+        <android.support.v7.widget.CardView
+            android:id="@+id/service_cv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="4dp"
+            >
 
-</RelativeLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                android:src="@drawable/request_vizbee"/>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/wiki_cv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/service_cv"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="4dp"
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                android:src="@drawable/wikipedia_img"/>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/floating_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/ic_call"
+            android:layout_above="@id/tab_layout"
+            app:fabSize="normal"
+            android:layout_margin="16dp" />
+
+        <Button
+            android:id="@+id/help_me_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Emergency"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="16dp"
+            android:background="@drawable/rectangle"
+            android:layout_alignParentBottom="true"/>
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>
