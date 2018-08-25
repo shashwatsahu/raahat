@@ -11,17 +11,17 @@
         android:id="@+id/safe_text_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Are you safe"
+        android:text="Please mark yourself."
         android:layout_centerHorizontal="true"
         android:layout_margin="16dp"
-        android:textColor="@android:color/white"
-        />
+        android:textSize="16sp"
+        android:textColor="@android:color/white"/>
 
     <Button
         android:id="@+id/confirm_safe_bnt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Yes"
+        android:text="I'm Safe."
         android:layout_below="@id/safe_text_id"
         android:layout_alignParentStart="true"
         android:textColor="@color/white"
@@ -33,7 +33,7 @@
         android:id="@+id/deny_safe_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No"
+        android:text="I feel unsafe."
         android:layout_below="@id/safe_text_id"
         android:layout_alignParentEnd="true"
         android:textColor="@color/white"

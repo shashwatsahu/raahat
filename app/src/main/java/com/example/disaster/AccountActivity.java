@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -41,6 +42,14 @@ public class AccountActivity extends Fragment {
 
                 v.showContextMenu();
 
+            }
+        });
+
+        ImageView fb = rootView.findViewById(R.id.facebook_btn);
+        fb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity().getApplicationContext(), Facebook.class));
             }
         });
 

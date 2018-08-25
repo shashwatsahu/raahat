@@ -28,6 +28,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -125,6 +126,22 @@ public class HomeActivity extends Fragment implements LoaderManager.LoaderCallba
         Log.i(TAG,"Test:calling initLoader()");
         loaderManager.initLoader(1, bundle, this);
 
+        CardView service = rootView.findViewById(R.id.service_cv);
+        service.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity().getApplicationContext(), "Request has been send to VizzBee.Inc", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        CardView wiki = rootView.findViewById(R.id.wiki_cv);
+        wiki.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity().getApplicationContext(), WikipediaPage.class));
+            }
+        });
+
         //todo URL
 
         Button helpMeBtn = rootView.findViewById(R.id.help_me_btn);
@@ -132,6 +149,14 @@ public class HomeActivity extends Fragment implements LoaderManager.LoaderCallba
         //initialize current location...
         mResultReceiver = new AddressResultReceiver(new Handler());
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity().getApplicationContext());
+
+        ImageButton survey = rootView.findViewById(R.id.survey_btn);
+        survey.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity().getApplicationContext(), Survey.class));
+            }
+        });
 
         ImageButton arcGisBtn = rootView.findViewById(R.id.arcgis_btn);
         arcGisBtn.setOnClickListener(new View.OnClickListener() {
@@ -152,6 +177,8 @@ public class HomeActivity extends Fragment implements LoaderManager.LoaderCallba
         helpMeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getActivity().getApplicationContext(), "Your Request has been accepted!", Toast.LENGTH_SHORT).show();
+
                 updateValuesFromBundle(savedInstanceState);
 
                 mAddressRequested = false;
@@ -632,8 +659,8 @@ public class HomeActivity extends Fragment implements LoaderManager.LoaderCallba
                     lat = Double.parseDouble(strings[1]);
                     lng = Double.parseDouble(strings[2]);
 
-                    Toast.makeText(getActivity().getApplicationContext(), address + " " + city + " " + state + " " + country
-                    , Toast.LENGTH_SHORT).show();
+                 //   Toast.makeText(getActivity().getApplicationContext(), address + " " + city + " " + state + " " + country
+                   // , Toast.LENGTH_SHORT).show();
                 }
             }
 

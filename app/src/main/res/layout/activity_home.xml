@@ -17,8 +17,8 @@
 
         <ImageView
             android:id="@+id/app_img_id"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_centerHorizontal="true"
             android:layout_toStartOf="@id/app_text_id"
             android:layout_marginTop="28dp"
@@ -51,7 +51,7 @@
                 android:scrollbars="none">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
@@ -60,14 +60,33 @@
                         android:layout_height="75dp"
                         android:layout_margin="8dp">
 
-                        <ImageButton
-                            android:id="@+id/map_btn"
-                            android:layout_width="wrap_content"
+                        <RelativeLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/icons8map_48"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:background="@android:color/transparent"/>
+                            >
+
+                            <ImageButton
+                                android:id="@+id/map_btn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/icons8map_48"
+                                android:layout_centerHorizontal="true"
+                                android:layout_centerVertical="true"
+                                android:background="@android:color/transparent"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Mark Yourself"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginStart="2dp"
+                                android:textSize="12sp"
+                                android:singleLine="true"
+                                android:textColor="@color/colorPrimary"
+                                android:layout_below="@id/map_btn"/>
+
+                        </RelativeLayout>
+
 
                     </android.support.v7.widget.CardView>
 
@@ -75,15 +94,34 @@
                         android:layout_width="75dp"
                         android:layout_height="75dp"
                         android:layout_margin="8dp">
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            >
+
 
                         <ImageButton
                             android:id="@+id/alarm_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/icons8_siren48"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
                             android:background="@android:color/transparent"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Siren"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginStart="2dp"
+                                android:textSize="12sp"
+                                android:layout_centerHorizontal="true"
+                                android:singleLine="true"
+                                android:textColor="@color/colorPrimary"
+                                android:layout_below="@id/alarm_btn"/>
+
+                        </RelativeLayout>
 
                     </android.support.v7.widget.CardView>
 
@@ -91,15 +129,34 @@
                         android:layout_width="75dp"
                         android:layout_height="75dp"
                         android:layout_margin="8dp">
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            >
+
 
                         <ImageButton
                             android:id="@+id/arcgis_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/toolbar"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
                             android:src="@drawable/icons8_map_pinpoint_48"
                             android:background="@color/transparent"
-                            android:layout_margin="16dp"/>
+                            />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Hazards Info"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginStart="2dp"
+                                android:textSize="12sp"
+                                android:singleLine="true"
+                                android:textColor="@color/colorPrimary"
+                                android:layout_below="@id/arcgis_btn"/>
+
+                        </RelativeLayout>
 
                     </android.support.v7.widget.CardView>
 
@@ -107,15 +164,33 @@
                         android:layout_width="75dp"
                         android:layout_height="75dp"
                         android:layout_margin="8dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            >
 
                         <ImageButton
                             android:id="@+id/drone_btn"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:src="@drawable/icons8_quadcopter_48"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
                             android:background="@android:color/transparent"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Drone Delivery"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginStart="2dp"
+                                android:textSize="12sp"
+                                android:singleLine="true"
+                                android:textColor="@color/colorPrimary"
+                                android:layout_below="@id/drone_btn"/>
+
+                        </RelativeLayout>
 
                     </android.support.v7.widget.CardView>
 
@@ -123,15 +198,34 @@
                         android:layout_width="75dp"
                         android:layout_height="75dp"
                         android:layout_margin="8dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            >
 
                         <ImageButton
                             android:id="@+id/base_map_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/icons8_destination_48"
-                            android:layout_weight="1"
-                            android:layout_gravity="center"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
                             android:background="@android:color/transparent"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Updates"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginStart="2dp"
+                                android:textSize="12sp"
+                                android:singleLine="true"
+                                android:textColor="@color/colorPrimary"
+                                android:layout_below="@id/base_map_btn"/>
+
+                        </RelativeLayout>
 
                     </android.support.v7.widget.CardView>
 
@@ -141,14 +235,65 @@
                         android:layout_height="75dp"
                         android:layout_margin="8dp">
 
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            >
+
                         <ImageButton
                             android:id="@+id/flash_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/icons8_headlight_48"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
                             android:background="@android:color/transparent"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Siren"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginStart="2dp"
+                                android:textSize="12sp"
+                                android:singleLine="true"
+                                android:textColor="@color/colorPrimary"
+                                android:layout_below="@id/flash_btn"/>
+
+                        </RelativeLayout>
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:layout_margin="8dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            >
+
+                        <ImageButton
+                            android:id="@+id/survey_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/icons8_survey_48"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:background="@android:color/transparent"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Survey"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginStart="2dp"
+                                android:textSize="12sp"
+                                android:singleLine="true"
+                                android:textColor="@color/colorPrimary"
+                                android:layout_below="@id/survey_btn"/>
+
+                        </RelativeLayout>
 
                     </android.support.v7.widget.CardView>
 
@@ -171,6 +316,8 @@
             android:id="@+id/service_cv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="0dp"
