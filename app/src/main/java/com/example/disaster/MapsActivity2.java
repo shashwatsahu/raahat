@@ -103,7 +103,7 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
 
         behavior = BottomSheetBehavior.from(bottomSheet1);
 
-        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.activity_map);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.activity_map2);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);

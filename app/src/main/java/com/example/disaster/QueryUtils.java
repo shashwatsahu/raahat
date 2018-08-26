@@ -22,10 +22,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+
 
 /**
  * Created by hp on 28-01-2018.
@@ -118,19 +115,6 @@ public class QueryUtils extends Application {
             urlConnection.setReadTimeout(10000);
             urlConnection.setConnectTimeout(10000);
             urlConnection.connect();
-
-          final OkHttpClient okHttpClient;
-
-            okHttpClient = new OkHttpClient.Builder()
-                    .addNetworkInterceptor(new Interceptor() {
-                        @Override
-                        public Response intercept(Interceptor.Chain chain) throws IOException {
-                            Request request = chain.request().newBuilder().addHeader("Connection", "close").build();
-
-                            return chain.proceed(request);
-                        }
-                    })
-                    .build();
 
             Log.i(TAG, "Status:" + urlConnection.getResponseCode());
 

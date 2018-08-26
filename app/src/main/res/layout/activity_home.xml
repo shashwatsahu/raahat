@@ -41,6 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:layout_alignParentBottom="true"
+            android:layout_below="@id/app_img_id"
             android:background="@android:color/transparent">
 
             <HorizontalScrollView
@@ -65,13 +66,15 @@
                             android:layout_height="wrap_content"
                             >
 
-                            <ImageButton
+                            <ImageView
                                 android:id="@+id/map_btn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/icons8map_48"
                                 android:layout_centerHorizontal="true"
                                 android:layout_centerVertical="true"
+                                android:clickable="true"
+                                android:focusable="true"
                                 android:background="@android:color/transparent"/>
 
                             <TextView
@@ -100,13 +103,15 @@
                             >
 
 
-                        <ImageButton
+                        <ImageView
                             android:id="@+id/alarm_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/icons8_siren48"
                             android:layout_centerHorizontal="true"
                             android:layout_centerVertical="true"
+                            android:clickable="true"
+                            android:focusable="true"
                             android:background="@android:color/transparent"/>
 
                             <TextView
@@ -135,12 +140,14 @@
                             >
 
 
-                        <ImageButton
+                        <ImageView
                             android:id="@+id/arcgis_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
                             android:layout_centerVertical="true"
+                            android:clickable="true"
+                            android:focusable="true"
                             android:src="@drawable/icons8_map_pinpoint_48"
                             android:background="@color/transparent"
                             />
@@ -170,13 +177,15 @@
                             android:layout_height="wrap_content"
                             >
 
-                        <ImageButton
+                        <ImageView
                             android:id="@+id/drone_btn"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:src="@drawable/icons8_quadcopter_48"
                             android:layout_centerHorizontal="true"
                             android:layout_centerVertical="true"
+                            android:clickable="true"
+                            android:focusable="true"
                             android:background="@android:color/transparent"/>
 
                             <TextView
@@ -204,13 +213,15 @@
                             android:layout_height="wrap_content"
                             >
 
-                        <ImageButton
+                        <ImageView
                             android:id="@+id/base_map_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/icons8_destination_48"
                             android:layout_centerHorizontal="true"
                             android:layout_centerVertical="true"
+                            android:clickable="true"
+                            android:focusable="true"
                             android:background="@android:color/transparent"/>
 
                             <TextView
@@ -240,12 +251,14 @@
                             android:layout_height="wrap_content"
                             >
 
-                        <ImageButton
+                        <ImageView
                             android:id="@+id/flash_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/icons8_headlight_48"
                             android:layout_centerHorizontal="true"
+                            android:clickable="true"
+                            android:focusable="true"
                             android:layout_centerVertical="true"
                             android:background="@android:color/transparent"/>
 
@@ -274,13 +287,15 @@
                             android:layout_height="wrap_content"
                             >
 
-                        <ImageButton
+                        <ImageView
                             android:id="@+id/survey_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/icons8_survey_48"
                             android:layout_centerHorizontal="true"
                             android:layout_centerVertical="true"
+                            android:clickable="true"
+                            android:focusable="true"
                             android:background="@android:color/transparent"/>
                             <TextView
                                 android:layout_width="wrap_content"

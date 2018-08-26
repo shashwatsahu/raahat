@@ -1,11 +1,8 @@
 package com.example.disaster;
 
 import android.Manifest;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.LoaderManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
@@ -15,8 +12,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.media.MediaPlayer;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -26,7 +21,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,14 +29,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.disaster.account.AccountManager;
-import com.example.disaster.basemaps.BasemapsDialogFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -150,7 +141,7 @@ public class HomeActivity extends Fragment implements LoaderManager.LoaderCallba
         mResultReceiver = new AddressResultReceiver(new Handler());
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity().getApplicationContext());
 
-        ImageButton survey = rootView.findViewById(R.id.survey_btn);
+        ImageView survey = rootView.findViewById(R.id.survey_btn);
         survey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -158,7 +149,7 @@ public class HomeActivity extends Fragment implements LoaderManager.LoaderCallba
             }
         });
 
-        ImageButton arcGisBtn = rootView.findViewById(R.id.arcgis_btn);
+        ImageView arcGisBtn = rootView.findViewById(R.id.arcgis_btn);
         arcGisBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -166,7 +157,7 @@ public class HomeActivity extends Fragment implements LoaderManager.LoaderCallba
             }
         });
 
-        ImageButton baseBtn = rootView.findViewById(R.id.base_map_btn);
+        ImageView baseBtn = rootView.findViewById(R.id.base_map_btn);
         baseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -218,7 +209,7 @@ public class HomeActivity extends Fragment implements LoaderManager.LoaderCallba
 
 
         mediaPlayer= MediaPlayer.create(getActivity().getApplicationContext(), R.raw.siren);
-        final ImageButton playButton= rootView.findViewById(R.id.alarm_btn);
+        final ImageView playButton= rootView.findViewById(R.id.alarm_btn);
         playButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -237,7 +228,7 @@ public class HomeActivity extends Fragment implements LoaderManager.LoaderCallba
             }
         });
 
-        final ImageButton flash = rootView.findViewById(R.id.flash_btn);
+        final ImageView flash = rootView.findViewById(R.id.flash_btn);
         flash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -245,7 +236,7 @@ public class HomeActivity extends Fragment implements LoaderManager.LoaderCallba
             }
         });
 
-        final ImageButton mapBtn = rootView.findViewById(R.id.map_btn);
+        final ImageView mapBtn = rootView.findViewById(R.id.map_btn);
         mapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -271,7 +262,7 @@ public class HomeActivity extends Fragment implements LoaderManager.LoaderCallba
             }
         });
 
-        final ImageButton droneBtn = rootView.findViewById(R.id.drone_btn);
+        final ImageView droneBtn = rootView.findViewById(R.id.drone_btn);
         droneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -333,70 +324,10 @@ public class HomeActivity extends Fragment implements LoaderManager.LoaderCallba
         }
     }
 
-    private void checkSettings() {
-        // Is GPS enabled?
-        boolean gpsEnabled = locationTrackingEnabled();
-        // Is there internet connectivity?
-        boolean internetConnected = internetConnectivity();
-
-        if (gpsEnabled && internetConnected) {
-            setView();
-        }else if (!gpsEnabled) {
-            Intent gpsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            showDialog(gpsIntent, REQUEST_LOCATION_SETTINGS, getString(R.string.location_tracking_off));
-        }else if(!internetConnected)	{
-            Intent internetIntent = new Intent(Settings.ACTION_WIFI_SETTINGS);
-            showDialog(internetIntent, REQUEST_WIFI_SETTINGS, getString(R.string.wireless_off));
-        }
-    }
-
     private boolean locationTrackingEnabled() {
         LocationManager locationManager = (LocationManager) getActivity().getApplicationContext().getApplicationContext()
                 .getSystemService(Context.LOCATION_SERVICE);
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-    }
-
-    private boolean internetConnectivity(){
-        ConnectivityManager connManager = (ConnectivityManager) getActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo wifi = connManager.getActiveNetworkInfo();
-        if (wifi == null){
-            return false;
-        }else {
-            return wifi.isConnected();
-        }
-    }
-
-    private void showDialog(final Intent intent, final int requestCode, String message) {
-
-        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity().getApplicationContext());
-        alertDialog.setMessage(message);
-        alertDialog.setPositiveButton(getString(R.string.open_location_options), new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //
-                startActivityForResult(intent, requestCode);
-            }
-        });
-        alertDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        alertDialog.create().show();
-    }
-
-    private void setView() {
-        if (AccountManager.getInstance().isSignedIn()) {
-            // we are signed in to a portal - show the content browser to choose
-            // a map
-            showContentBrowser();
-        } else {
-            // show the default map
-            showMap(null, null);
-        }
     }
 
     /**
@@ -408,31 +339,6 @@ public class HomeActivity extends Fragment implements LoaderManager.LoaderCallba
      * @param basemapPortalItemId
      *            - String representing a basemap portal item
      */
-    public void showMap(String portalItemId, String basemapPortalItemId) {
-        // remove existing MapFragment explicitly, simply replacing it can cause
-        // the app to freeze when switching basemaps
-        FragmentTransaction transaction;
-        FragmentManager fragmentManager = getActivity().getFragmentManager();
-        android.app.Fragment currentMapFragment = fragmentManager.findFragmentByTag(MapFragment.TAG);
-        if (currentMapFragment != null) {
-            transaction = fragmentManager.beginTransaction();
-            transaction.remove(currentMapFragment);
-            transaction.commit();
-        }
-
-        Log.i(TAG, "portal:" + portalItemId + " basemap:" + basemapPortalItemId);
-
-        MapFragment mapFragment = MapFragment.newInstance(portalItemId, basemapPortalItemId);
-
-        transaction = fragmentManager.beginTransaction();
-        Log.i(TAG, "show map");
-       //todo
-        // transaction.replace(R.id.maps_app_activity_content_frame, mapFragment, MapFragment.TAG);
-        transaction.addToBackStack(null);
-        transaction.commit();
-
-        getActivity().invalidateOptionsMenu(); // reload the options menu
-    }
 
     /**
      * opens a default map.
@@ -441,26 +347,6 @@ public class HomeActivity extends Fragment implements LoaderManager.LoaderCallba
     /**
      * Opens the content browser that shows the user's maps.
      */
-    private void showContentBrowser() {
-        FragmentManager fragmentManager = getActivity().getFragmentManager();
-        android.app.Fragment browseFragment = fragmentManager.findFragmentByTag(ContentBrowserFragment.TAG);
-        if (browseFragment == null) {
-            browseFragment = new ContentBrowserFragment();
-        }
-
-        if (!browseFragment.isVisible()) {
-            Log.i(TAG, "in the showcontentbrowser()");
-
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            //transaction.add(R.id.maps_app_activity_content_frame, browseFragment, ContentBrowserFragment.TAG);
-            transaction.addToBackStack(null);
-            transaction.commit();
-
-            getActivity().invalidateOptionsMenu(); // reload the options menu
-        }
-
-        //todo mDrawerLayout.closeDrawers();
-    }
 
     //getting current location...
 
